@@ -32,12 +32,18 @@ export function ActiveTurn({ movie, difficulty, onComplete }: ActiveTurnProps) {
   }, [timeLeft, isPaused, onComplete]);
 
   const handleSuccess = () => {
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 },
-      colors: difficulty === 'easy' ? ['#06b6d4', '#ffffff'] : ['#f43f5e', '#ffffff']
-    });
+    // Handle potential import variations for canvas-confetti
+    const fireConfetti = typeof confetti === 'function' ? confetti : (confetti as any)?.default;
+    
+    if (fireConfetti) {
+      fireConfetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: difficulty === 'easy' ? ['#06b6d4', '#ffffff'] : ['#f43f5e', '#ffffff']
+      });
+    }
+    
     onComplete(true);
   };
 
